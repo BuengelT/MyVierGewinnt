@@ -187,18 +187,15 @@ void switchSign(int* value) {
 *	@param flagDirectionChange		false, wenn kein Richtungswechsel stattgefunden hat
 *	@param direction	Enthaelt string lediglich zum testen
 */
-bool checkDirection(char gameField[][columSize], int fieldSize, int x, int y, int offSetX, int offSetY, char player, int count, Point startPos, bool flagDirectionChange, string direction) {
-	//cout << endl << "Aktuelle Position im Array(" << x << y << "). Es geht in Richtung [" << direction << "]. Gezaehlt sind [" << count << "].Richtige" << endl;
+bool checkDirection(char gameField[][columSize], int fieldSize, int x, int y, int offSetX, int offSetY, char player, int count, Point startPos, bool flagDirectionChange, string direction) {	
 	bool result = false;
 
 	if (count == 4) { return true; } // Wenn 4 in einer Reihe gezaehlt werden, wird true zurueck gegeben
 	int valueX = x + offSetX, valueY = y + offSetY;
 
-	if (valueX >= 0 && valueX < fieldSize && valueY >= 0 && valueY < fieldSize) { // pruefen ob der naechste anliegende Stein Innerhalb der Array Grenze liegt
-		//cout << "naechste Stelle zu pruefen(" << valueX << valueY << ")" << endl;
+	if (valueX >= 0 && valueX < fieldSize && valueY >= 0 && valueY < fieldSize) { // pruefen ob der naechste anliegende Stein Innerhalb der Array Grenze liegt		
 		if (gameField[valueX][valueY] == player) {
-			count++;
-			//cout << "Der Stein an der Stelle(" << valueX << valueY << ") [ist gleich] " << player << " gehe weiter!" << endl;
+			count++;			
 			// rekursiver aufruf
 			if (!flagDirectionChange) { // pruefen ob ein Richtungswechsel stattgefunden hat
 				return checkDirection(gameField, fieldSize, valueX, valueY, offSetX, offSetY, player, count, startPos, false, directionToString(offSetX, offSetY));
@@ -207,31 +204,24 @@ bool checkDirection(char gameField[][columSize], int fieldSize, int x, int y, in
 				return checkDirection(gameField, fieldSize, valueX, valueY, offSetX, offSetY, player, count, startPos, true, directionToString(offSetX, offSetY));
 			}
 		}
-		else {
-			//cout << "[FALSE] (" << valueX << valueY << ") ist [NICHT gleich] " << player << " gehe weiter!" << endl;
-			if (!flagDirectionChange) {//kann nur durchgefuehrt werden wenn noch kein Richtungswechsel stattgefunden hat
-				//cout << "[Wechsel] die Richtung!" << endl;
+		else {			
+			if (!flagDirectionChange) {//kann nur durchgefuehrt werden wenn noch kein Richtungswechsel stattgefunden hat				
 				switchSign(&offSetX); switchSign(&offSetY);
-				valueX = startPos.x; valueY = startPos.y;
-				//cout << "Gehe zu Startpunkt(" << valueX << valueY << ")" << endl;
+				valueX = startPos.x; valueY = startPos.y;				
 				return checkDirection(gameField, fieldSize, valueX, valueY, offSetX, offSetY, player, count, startPos, true, directionToString(offSetX, offSetY));
 			}
-			else {
-				//cout << "Es gab bereits ein Richtungswechsel!" << endl;
+			else {				
 				return false;
 			}
 		}
 	}
 	else { //Wenn der Rand des Spielfeldes erreicht wurde, wird zunaechst ein Ridchtungswechsel durchgefuehrt
-		if (!flagDirectionChange) {//kann nur durchgefuehrt werden wenn noch kein Richtungswechsel stattgefunden hat
-			//cout << "[Wechsel] die Richtung!" << endl;
+		if (!flagDirectionChange) {//kann nur durchgefuehrt werden wenn noch kein Richtungswechsel stattgefunden hat			
 			switchSign(&offSetX); switchSign(&offSetY);
-			valueX = startPos.x; valueY = startPos.y;
-			//cout << "Gehe zu Startpunkt(" << valueX << valueY << ")" << endl;
+			valueX = startPos.x; valueY = startPos.y;			
 			return checkDirection(gameField, fieldSize, valueX, valueY, offSetX, offSetY, player, count, startPos, true, directionToString(offSetX, offSetY));
 		}
 		else {
-			//cout << "Die Stelle(" << valueX << valueY << ") liegt ausserhalb des Arrays" << endl;
 			return false;
 		}
 	}
@@ -291,28 +281,6 @@ int main() {
 					if (!win)
 						win = checkDirection(gameField, rowSize, lastStonePosition.x, lastStonePosition.y, directions[i][0], directions[i][1], player, count, lastStonePosition, false, directionToString(directions[i][0], directions[i][1]));
 				}
-				/*
-				// links-oben
-				if (!win)
-					win = checkDirection(gameField, rowSize, lastStonePosition.x, lastStonePosition.y, -1, -1, player, 1, lastStonePosition, false, "[links-oben]");
-
-				// links
-				if (!win)
-					win = checkDirection(gameField, rowSize, lastStonePosition.x, lastStonePosition.y, 0, -1, player, 1, lastStonePosition, false, "[links]");
-
-				// links-unten
-				if (!win)
-					win = checkDirection(gameField, rowSize, lastStonePosition.x, lastStonePosition.y, +1, -1, player, 1, lastStonePosition, false, "[links-unten]");
-
-				// unten
-				if (!win)
-					win = checkDirection(gameField, rowSize, lastStonePosition.x, lastStonePosition.y, +1, 0, player, 1, lastStonePosition, false, "[unten]");
-				//Diese fallen weg da ein Richtungswechsel implementiert ist
-				// unten-rechts		x=+1 y=+1
-				// rechts			x= 0 y=+1
-				// rechts-oben		x=-1 y=+1
-				// oben faellt eh weg da ueber dem gesetzten Stein niemals ein anderer Stein liegen kann
-				*/
 			}
 
 			//Ausstiegspunkt wenn Spieler gewonnen hat
